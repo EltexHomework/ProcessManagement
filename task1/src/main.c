@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <unistd.h>
+#include <sys//types.h>
+#include <sys/wait.h>
 
 int main(void) {
   pid_t pid = fork();
@@ -9,13 +11,16 @@ int main(void) {
   }
   // Child
   else if (pid == 0) {
-    pid_t child_pid = getpid();
-    printf("Child pid: %d\n", child_pid);
+    printf("___Child process___\nParent pid: %d\nProcess pid: %d\n", getppid(), getpid());
   } 
   // Parent
   else {
-    pid_t parent_pid = getpid();
-    printf("Parent pid: %d\n", parent_pid);
+    pid_t wait_pid;
+    int status;
+    
+    // Wait for child termination. Parent process can terminate faster than child
+    while ((wait_pid = wait(&status)) > 0);
+    printf("___Parent process___\nParent pid: %d\nProcess pid: %d\n", getppid(), getpid());
   }
   return 0;
 }
