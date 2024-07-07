@@ -52,7 +52,10 @@ thenorth:/home/thenorth/eltex/ProcessManagement$
 
 ## Демонстрация работы программ
 ### Задание №1
+![task1](https://github.com/EltexHomework/ProcessManagement/assets/70006380/03be7ce5-985b-47be-a0d9-acad19575b46)
 
 ### Задание №2
+![task2](https://github.com/EltexHomework/ProcessManagement/assets/70006380/89de757c-fb2b-4ab2-b115-79a19f489565)
 
 ### Задание №3
+![task3](https://github.com/EltexHomework/ProcessManagement/assets/70006380/e66c293b-38fa-4abc-b7e2-5b0a9b5d5f70)
