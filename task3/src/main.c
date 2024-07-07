@@ -1,4 +1,4 @@
-#include "headers/command_interpretor.h"
+#include "headers/interpretor.h"
 
 int main(void) {
   struct interpretor* interpretor = create_interpretor();

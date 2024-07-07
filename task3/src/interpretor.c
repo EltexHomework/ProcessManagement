@@ -1,5 +1,4 @@
 #include "headers/interpretor.h"
-#include <stdio.h>
 
 struct interpretor* create_interpretor() {
   struct interpretor* interpretor = (struct interpretor*) 
@@ -40,26 +39,31 @@ void run_interpretor(struct interpretor* interpretor) {
 }
 
 void execute(struct interpretor* interpretor, char* request) {
-  pid_t child = fork();
-  int status;
+  char* request_copy = strdup(request);
   char* saveptr;
+  char* program_name = strtok_r(request, " \n", &saveptr);
 
-  if (child == 0) {
-    char* program_name = strtok_r(request, " \n", &saveptr);
-   
-    if (strcmp(program_name, "cd") == 0) {
-      char* path = strtok_r(NULL, " \n", &saveptr);   
-      change_dir(interpretor, path); 
-      exit(EXIT_SUCCESS); 
-    } else if (strcmp(program_name, "exit") == 0) {
-      exit(EXIT_SUCCESS); 
-    } else {
-      system(request);
-      exit(EXIT_SUCCESS); 
-    }
+  if (strcmp(program_name, "cd") == 0) {
+    char* path = strtok_r(NULL, " \n", &saveptr);
+    change_dir(interpretor, path); 
+    return;
+  } else if (strcmp(program_name, "exit") == 0) {
+    exit(EXIT_SUCCESS);
   }
 
-  while ((child = wait(&status)) > 0);
+  pid_t child = fork();
+  int status;
+
+  if (child == 0) {
+    if (system(request_copy) != 0) {
+      perror("system error");
+    }
+    exit(EXIT_SUCCESS);
+  } else if (child > 0) {
+    while ((child = wait(&status)) > 0);
+  } else {
+    perror("fork error");
+  }
 }
 
 void print_user_info(struct interpretor* interpretor) {

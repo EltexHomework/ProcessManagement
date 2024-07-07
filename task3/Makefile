@@ -1,5 +1,5 @@
 CC := gcc
-CFLAGS := -g -Werror -Wall -O2 -I$(SRC_DIR)/headers
+CFLAGS := -g -Wall -Werror -O2 -I$(SRC_DIR)/headers
 
 SRC_DIR := src
 BIN_DIR := bin

@@ -1,6 +1,7 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
-#include <sys//types.h>
+#include <sys/types.h>
 #include <sys/wait.h>
 
 int main(void) {
@@ -12,6 +13,7 @@ int main(void) {
   // Child
   else if (pid == 0) {
     printf("___Child process___\nParent pid: %d\nProcess pid: %d\n", getppid(), getpid());
+    exit(EXIT_SUCCESS);
   } 
   // Parent
   else {
