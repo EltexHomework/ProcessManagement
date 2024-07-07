@@ -1,26 +1,26 @@
 CC := gcc
-CFLAGS := -Wall -Werror -O2
+CFLAGS := -g -Werror -Wall -O2 -I$(SRC_DIR)/headers
 
 SRC_DIR := src
 BIN_DIR := bin
 
-# Source files and object file paths
 SOURCES := $(wildcard $(SRC_DIR)/*.c)
-OBJECTS := $(patsubst $(SRC_DIR)/%.c, $(BIN_DIR)/%, $(SOURCES))
+OBJECTS := $(patsubst $(SRC_DIR)/%.c, $(BIN_DIR)/%.o, $(SOURCES))
 
-all: $(BIN_DIR) $(OBJECTS)
+all: $(BIN_DIR) $(BIN_DIR)/main
 
-# Create bin directory
 $(BIN_DIR):
 	@mkdir -p $@
 
-# Compile src files to binary
-$(BIN_DIR)/%: $(SRC_DIR)/%.c
-	@$(CC) $(CFLAGS) $< -o $@
+# Compile .c files to .o files 
+$(BIN_DIR)/%.o: $(SRC_DIR)/%.c
+	@$(CC) $(CFLAGS) -c $< -o $@
 
-# Clean bin folder 
+# Link .o files
+$(BIN_DIR)/main: $(OBJECTS)
+	@$(CC) $(OBJECTS) -o $@
+
 clean:
 	@rm -rf $(BIN_DIR)
 
 .PHONY: all clean
-
