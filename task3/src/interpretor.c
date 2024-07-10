@@ -39,15 +39,18 @@ void run_interpretor(struct interpretor* interpretor) {
 }
 
 void execute(struct interpretor* interpretor, char* request) {
-  char* request_copy = strdup(request);
   char* saveptr;
+  char* request_copy = strdup(request);
   char* program_name = strtok_r(request, " \n", &saveptr);
 
   if (strcmp(program_name, "cd") == 0) {
     char* path = strtok_r(NULL, " \n", &saveptr);
-    change_dir(interpretor, path); 
+    change_dir(interpretor, path);
+    free(request_copy);
     return;
   } else if (strcmp(program_name, "exit") == 0) {
+    free(request_copy);
+    free(interpretor);
     exit(EXIT_SUCCESS);
   }
 
@@ -58,11 +61,15 @@ void execute(struct interpretor* interpretor, char* request) {
     if (system(request_copy) != 0) {
       perror("system error");
     }
+    free(request_copy);
+    free(interpretor);
     exit(EXIT_SUCCESS);
   } else if (child > 0) {
     while ((child = wait(&status)) > 0);
+    free(request_copy);
   } else {
     perror("fork error");
+    free(request_copy);
   }
 }
 
