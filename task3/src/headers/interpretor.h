@@ -22,10 +22,14 @@ struct interpretor* create_interpretor();
 
 void run_interpretor(struct interpretor* interpretor);
 
-void execute(struct interpretor* interpretor, char* request);
+void execute(struct interpretor* interpretor, char** args);
 
 void change_dir(struct interpretor* interpretor, char* path);
 
 void print_user_info(struct interpretor* interpretor);
+
+void parse(char input[INPUT_LENGTH], char** args);
+
+void dispose(struct interpretor* interpretor);
 
 #endif /* INTERPRETOR_H */

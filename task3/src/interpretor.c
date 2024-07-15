@@ -25,6 +25,7 @@ struct interpretor* create_interpretor() {
 
 void run_interpretor(struct interpretor* interpretor) {
   char request[INPUT_LENGTH];
+  char** args = (char**) malloc(ARG_LENGTH * sizeof(char*)); 
 
   while (1) {
     print_user_info(interpretor); 
@@ -33,43 +34,37 @@ void run_interpretor(struct interpretor* interpretor) {
       perror("fgets error");
       return;
     }
-    
-    execute(interpretor, request);
+
+    parse(request, args); 
+    execute(interpretor, args);
   }
 }
 
-void execute(struct interpretor* interpretor, char* request) {
-  char* saveptr;
-  char* request_copy = strdup(request);
-  char* program_name = strtok_r(request, " \n", &saveptr);
-
-  if (strcmp(program_name, "cd") == 0) {
-    char* path = strtok_r(NULL, " \n", &saveptr);
-    change_dir(interpretor, path);
-    free(request_copy);
+void execute(struct interpretor* interpretor, char** args) {
+  if (strcmp(args[0], "cd") == 0) {
+    change_dir(interpretor, args[1]);
     return;
-  } else if (strcmp(program_name, "exit") == 0) {
-    free(request_copy);
-    free(interpretor);
+  } else if (strcmp(args[0], "exit") == 0) {
+    free(args);
+    dispose(interpretor);
     exit(EXIT_SUCCESS);
   }
 
   pid_t child = fork();
-  int status;
 
-  if (child == 0) {
-    if (system(request_copy) != 0) {
-      perror("system error");
-    }
-    free(request_copy);
-    free(interpretor);
-    exit(EXIT_SUCCESS);
-  } else if (child > 0) {
-    while ((child = wait(&status)) > 0);
-    free(request_copy);
-  } else {
+  if (child < 0) {
     perror("fork error");
-    free(request_copy);
+    exit(EXIT_FAILURE);
+  } else if (child == 0) {
+    if (execvp(args[0], args) < 0) {
+      perror("exec error");
+      exit(EXIT_FAILURE);
+    }
+  } else {
+    int status;
+    if (waitpid(child, &status, 0) == -1) {
+      perror("waitpid error");
+    }
   }
 }
 
@@ -85,4 +80,20 @@ void change_dir(struct interpretor* interpretor, char* path) {
   if (getcwd(interpretor->current_dir, sizeof(interpretor->current_dir)) == NULL) {
     perror("getcwd error");
   }
+}
+
+void parse(char input[INPUT_LENGTH], char** args) {
+  int i = 0;
+  char* token = strtok(input, " \n");
+   
+  while (token != NULL) {
+    args[i] = token;
+    token = strtok(NULL, " \n");
+    i++;
+  }
+  args[i] = NULL;
+}
+
+void dispose(struct interpretor* interpretor) {
+  free(interpretor);
 }
