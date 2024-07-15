@@ -1,4 +1,4 @@
-# # Задание 10 - Управление процессами 
+# Задание 10 - Управление процессами 
 ## Сборщик проекта
 В качестве сборщика проекта используется Makefile. Для компиляции проекта необходимо ввести следующую команду в корне проекта:
 ``` bash
@@ -58,4 +58,5 @@ thenorth:/home/thenorth/eltex/ProcessManagement$
 ![task2](https://github.com/EltexHomework/ProcessManagement/assets/70006380/89de757c-fb2b-4ab2-b115-79a19f489565)
 
 ### Задание №3
-![task3](https://github.com/EltexHomework/ProcessManagement/assets/70006380/e66c293b-38fa-4abc-b7e2-5b0a9b5d5f70)
+![task3](https://github.com/user-attachments/assets/2b1c8441-8005-4eaa-b7cd-d01c9cdbe0f2)
+
